@@ -20,6 +20,7 @@ type User struct {
 	BackgroundImage string `json:"background_image"` // 背景图片
 	LoginIP         string `json:"login_ip"`         // 最近登陆的IP地址
 	TotalFavorited  int64  `json:"total_favorited"`  // 被赞的总次数
+	WorkCount       int64  `json:"work_count"`       // 作品数量
 	FavoriteCount   int64  `json:"favorite_count"`   // 喜欢总数量
 }
 

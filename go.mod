@@ -16,8 +16,6 @@ require (
 	github.com/mattn/go-colorable v0.1.12
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.12.0
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.409
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/tiia v1.0.409
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
