@@ -7,7 +7,6 @@ import (
 type CreateUserRequest struct {
 	UserName string `form:"username" binding:"required,len=11"`
 	Password string `form:"password" binding:"required,len>=8"`
-	//LoginIP  string `form:"login_ip"`
 }
 
 type UserInfo struct {
