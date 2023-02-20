@@ -68,15 +68,15 @@ func (d *Dao) GetUserByEmail(username string) (model.User, error) {
 	return user.GetUserByEmail(d.engine)
 }
 
-func (d Dao) UpdateUserLoginIP(userId uint, loginIP string) error {
-	user := model.User{
-		Model: &model.Model{
-			ID: userId,
-		},
-		LoginIP: loginIP,
-	}
-	return user.UpdateIP(d.engine)
-}
+//func (d Dao) UpdateUserLoginIP(userId uint, loginIP string) error {
+//	user := model.User{
+//		Model: &model.Model{
+//			ID: userId,
+//		},
+//		LoginIP: loginIP,
+//	}
+//	return user.UpdateIP(d.engine)
+//}
 
 func (d Dao) UpdateById(userId uint, data map[string]interface{}) error {
 	user := model.User{

@@ -37,10 +37,10 @@ type GetUserByEmailRequest struct {
 	UserName string `form:"user_name"  binding:"required"`
 }
 
-type UpdateIPRequest struct {
-	ID      uint   `form:"id"`
-	LoginIP string `form:"login_ip"`
-}
+//type UpdateIPRequest struct {
+//	ID      uint   `form:"id"`
+//	LoginIP string `form:"login_ip"`
+//}
 
 // UpdateByIdRequest redis更新Mysql用户信息请求
 type UpdateByIdRequest struct {
@@ -52,9 +52,9 @@ func (svc *Service) CreateUser(param *CreateUserRequest) (uint, error) {
 	return svc.dao.CreateUser(param.UserName, param.Password)
 }
 
-func (svc *Service) UpdateUserLoginIP(param *UpdateIPRequest) error {
-	return svc.dao.UpdateUserLoginIP(param.ID, param.LoginIP)
-}
+//func (svc *Service) UpdateUserLoginIP(param *UpdateIPRequest) error {
+//	return svc.dao.UpdateUserLoginIP(param.ID, param.LoginIP)
+//}
 
 func (svc *Service) GetUserById(param *GetUserInfoRequest) (model.User, error) {
 	return svc.dao.GetUserById(param.UserId)
