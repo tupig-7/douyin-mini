@@ -33,11 +33,16 @@ func NewRouter() *gin.Engine {
 	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
 
 	user := v1.NewUser()
+	msg := v1.NewMsg()
 	apiv1 := r.Group("/douyin/")
 	apiv1.Use()
 	{
 		// user
 		apiv1.POST("/user/login/", user.Login)
+
+		// message
+		apiv1.GET("/message/chat", msg.Chat)
+		apiv1.POST("/message/action", msg.Action)
 	}
 
 
