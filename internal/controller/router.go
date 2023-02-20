@@ -38,8 +38,14 @@ func NewRouter() *gin.Engine {
 	{
 		// user
 		apiv1.POST("/user/login/", user.Login)
-	}
+		apiv1.POST("/user/register/", user.Register)
+		//apiv1.GET("/user/", user.Get)
+		//apiv1.GET("/verifyRegister/", notify.VerifyRegister)
+		//apiv1.GET("/verifyLogin/", notify.VerifyLogin)
 
+		// feed
+		//apiv1.GET("/feed/", feed.Feed)
+	}
 
 	return r
 }
