@@ -33,13 +33,16 @@ func NewRouter() *gin.Engine {
 	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
 
 	user := v1.NewUser()
+	publish := v1.NewPublish()
 	apiv1 := r.Group("/douyin/")
 	apiv1.Use()
 	{
 		// user
 		apiv1.POST("/user/login/", user.Login)
-	}
 
+		// publish
+		apiv1.POST("/publish/action/", publish.Action)
+	}
 
 	return r
 }
