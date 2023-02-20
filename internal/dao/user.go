@@ -6,6 +6,7 @@ import (
 	"douyin_service/pkg/util"
 )
 
+// 去除ip
 func (d *Dao) CreateUser(userName, password string) (uint, error) {
 	sign, err := util.RandomSign()
 	if err != nil {
