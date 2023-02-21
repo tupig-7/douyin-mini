@@ -1,5 +1,7 @@
 package service
 
+import "douyin_service/pkg/util"
+
 // CommentActionRequest 评论操作请求
 type CommentActionRequest struct {
 	// 用户id
@@ -163,7 +165,7 @@ func (svc *Service) CommentList(param *CommentListRequest) (CommentListResponse,
 				WorkCount:       user.WorkCount,
 				FavoriteCount:   user.FavoriteCount,
 			},
-			Content:    c.Content,
+			Content:    util.Filter(c.Content),
 			CreateDate: c.CreatedAt.Format("01-02"), // 这里要转化时间
 		})
 	}

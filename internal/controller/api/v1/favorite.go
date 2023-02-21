@@ -96,8 +96,8 @@ func (f *Favorite) List(c *gin.Context)  {
 	fvtList, err := svc.FavoriteList(&param)
 	resp := &service.FavoriteListResponse{}
 	if err != nil {
-		res.StatusCode = errcode.ErrorListCommentFail.Code()
-		res.StatusMsg =  errcode.ErrorListCommentFail.Msg()
+		res.StatusCode = errcode.ErrorListFavoriteFail.Code()
+		res.StatusMsg =  errcode.ErrorListFavoriteFail.Msg()
 		response.ToResponse(res)
 		return
 	}

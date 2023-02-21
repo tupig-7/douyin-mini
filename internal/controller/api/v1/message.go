@@ -77,7 +77,17 @@ func (m Message) Chat(c *gin.Context) {
 		return
 	}
 
+	// 从token中获取user_id
+	claims, err := app.ParseToken(param.Token)
+	if err != nil {
+		global.Logger.Errorf("app.ParseToken: %v", err)
+		response.ToErrorResponse(errcode.ErrorActionFail)
+		return
+	}
+	userId, _ := strconv.Atoi(claims.Audience)
+
 	svc := service.New(c.Request.Context())
+	param.FromUserId = uint(userId)
 	msgList, err := svc.MessageChat(&param)
 	resp := &service.MessagesResponse{}
 	if err != nil {

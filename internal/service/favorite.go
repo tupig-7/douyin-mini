@@ -52,7 +52,7 @@ func (svc *Service) CancelFavorite(param *FavoriteActionRequest) error {
 // FavoriteList 查询视频列表
 func (svc *Service) FavoriteList(param *FavoriteListRequest) (FavoriteListResponse, error) {
 	var fvtResp FavoriteListResponse
-	videoIds, err := svc.dao.GetFavoritesByVideoId(param.UserId)
+	videoIds, err := svc.dao.GetFavoritesByUserId(param.UserId)
 	var videos []VideoInfo
 	if err != nil {
 		return fvtResp, err
@@ -60,9 +60,6 @@ func (svc *Service) FavoriteList(param *FavoriteListRequest) (FavoriteListRespon
 	for _, vid := range videoIds {
 		video := model.Video{}
 		video, err := svc.dao.QueryVideoInfoById(vid)
-		if err != nil {
-			return fvtResp, err
-		}
 		if err != nil {
 			return fvtResp, err
 		}

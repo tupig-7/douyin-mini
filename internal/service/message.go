@@ -1,5 +1,7 @@
 package service
 
+import "douyin_service/pkg/util"
+
 // ChatRequest 聊天请求
 type ChatRequest struct {
 	Token  string `form:"token" binding:"required"`
@@ -20,8 +22,10 @@ type ChatResponse struct {
 
 // MessagesRequest 消息记录请求
 type MessagesRequest struct {
-	// 对方用户id
+	// 发送方ID
+	FromUserId uint
 	Token  string `form:"token" binding:"required"`
+	// 对方用户id
 	ToUserId uint `form:"to_user_id" binding:"required"`
 }
 
@@ -53,18 +57,19 @@ func (svc *Service) MessageAction(param *ChatRequest) (ChatResponse, error) {
 // MessageChat 聊天记录
 func (svc *Service) MessageChat(param *MessagesRequest) (MessagesResponse, error) {
 	var msgResp MessagesResponse
-	msgs, err := svc.dao.GetMsgByToUserId(param.ToUserId)
+	msgs, err := svc.dao.GetMsgByToUserId(param.ToUserId, param.FromUserId)
 	if err != nil {
 		return msgResp, err
 	}
 	for _, m := range msgs {
-		msgResp.MessageList = append(msgResp.MessageList, message{
+		msg := message{
 			ID:         m.ID,
 			ToUserId:   m.ToUserId,
 			FromUserId: m.FromUserId,
-			Content:    m.Content,
+			Content:    util.Filter(m.Content),
 			CreateTime: m.CreatedAt,
-		})
+		}
+		msgResp.MessageList = append(msgResp.MessageList, msg)
 	}
 	return msgResp, nil
 }

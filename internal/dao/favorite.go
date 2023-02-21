@@ -41,15 +41,15 @@ func (d *Dao) CancelFavorite(userId, videoId uint) error  {
 
 func (d *Dao) QueryVideoInfoById(videoId uint) (model.Video, error) {
 	var video model.Video
-	v, err := 	video.QueryVideoById(videoId, d.engine)
+	v, err := video.QueryVideoById(videoId, d.engine)
 	if err != nil {
 		return  video, err
 	}
 	return  v, nil
 }
 
-// GetFavoritesByVideoId 获取所有点赞的视频id
-func (d *Dao) GetFavoritesByVideoId(userId uint) ([]uint, error) {
+// GetFavoritesByUserId 获取所有点赞的视频id
+func (d *Dao) GetFavoritesByUserId(userId uint) ([]uint, error) {
 	f := model.Favorite{UserId: userId}
 	videoIds, err := f.QueryFavoriteByUserId(d.engine) // 获取点赞的所有视频id
 	if err != nil {
