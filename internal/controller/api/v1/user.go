@@ -87,10 +87,11 @@ func (u User) Get(c *gin.Context) {
 	//	B: user.ID,
 	//}
 	//flag, err := svc.IsFollow(isFollowReq)
+	//if err != nil {
+	//	global.Logger.Errorf("svc.IsFollow err: %v", err)
+	//}
 	flag := false
-	if err != nil {
-		global.Logger.Errorf("svc.IsFollow err: %v", err)
-	}
+
 	res = service.GetUserInfoResponse{
 		User: &service.UserInfo{
 			ID:              user.ID,
