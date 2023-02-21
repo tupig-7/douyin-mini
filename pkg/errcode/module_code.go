@@ -16,6 +16,8 @@ var (
 
 	ErrorActionFail     = NewError(10050001, "点赞失败")
 	ErrorActionListFail = NewError(10050002, "查询点赞作品失败")
+	// Favorite
+	ErrorActionFavoriteFail = NewError(10050003, "点赞操作错误")
 
 	// Follow
 	ErrorFollowActionFail = NewError(10040001, "关注用户失败")

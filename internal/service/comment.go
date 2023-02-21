@@ -94,7 +94,7 @@ func (svc *Service) CreateComment(param *CommentActionRequest) (CommentActionRes
 	return cmtResp, nil
 }
 
-// 删除评论
+// DeleteComment 删除评论
 func (svc *Service) DeleteComment(param *CommentActionRequest) (error) {
 	//var cmtResp CommentActionResponse
 	err := svc.dao.DeleteComment(param.CommentId)

@@ -46,7 +46,7 @@ func (v Video) UpdateCommentCnt(db *gorm.DB) error {
 }
 
 // QueryVideoById 根据videoId查询video信息
-func (v Video) QueryVideoById(videoID uint, db *gorm.DB) (Video, error) {
+func (v *Video) QueryVideoById(videoID uint, db *gorm.DB) (Video, error) {
 	var video Video
 	err := db.Where("id = ?", videoID).Find(&video).Error
 	if err != nil {

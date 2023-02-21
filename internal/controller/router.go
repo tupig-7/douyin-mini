@@ -34,6 +34,7 @@ func NewRouter() *gin.Engine {
 
 	user := v1.NewUser()
 	publish := v1.NewPublish()
+	favorite := v1.NewFavorite()
 	msg := v1.NewMsg()
 	cmt := v1.NewComment()
 	apiv1 := r.Group("/douyin/")
@@ -53,6 +54,10 @@ func NewRouter() *gin.Engine {
 		apiv1.POST("/comment/action", cmt.Action)
 		// publish
 		apiv1.POST("/publish/action/", publish.Action)
+
+		// favorite
+		apiv1.GET("/favorite/list/", favorite.List)
+		apiv1.POST("/favorite/action/", favorite.Action)
 	}
 	return r
 }
