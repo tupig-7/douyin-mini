@@ -45,20 +45,6 @@ type PublishActionRequest struct {
 	Title string                `form:"title" binding:"required"`
 }
 
-type UserInfo struct {
-	ID              uint   `json:"id"`
-	Name            string `json:"name"`
-	FollowCount     int64  `json:"follow_count"`
-	FollowerCount   int64  `json:"follower_count"`
-	IsFollow        bool   `json:"is_follow"`
-	Avatar          string `json:"avatar"`           // 头像
-	Signature       string `json:"signature"`        // 个性签名
-	BackgroundImage string `json:"background_image"` // 背景图片
-	LoginIP         string `json:"login_ip"`         // 登录IP
-	TotalFavorited  int64  `json:"total_favorited"`  // 被赞的总次数
-	FavoriteCount   int64  `json:"favorite_count"`   //喜欢总数量
-}
-
 var video_lock sync.Mutex
 
 func (svc *Service) PublishList(userId uint) (pubResp PublishListResponse, err error) {
