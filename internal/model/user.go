@@ -80,7 +80,7 @@ func (u User) CheckUser(db *gorm.DB) (uint, bool, error) {
 
 func (u User) GetUserById(db *gorm.DB) (User, error) {
 	var user User
-	if err := db.Where("id = ?", u.ID).Find(&user).Error; err != nil {
+	if err := db.Where("id = ?", u.ID).First(&user).Error; err != nil {
 		return user, err
 	}
 	return user, nil
