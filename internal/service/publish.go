@@ -3,8 +3,11 @@ package service
 import (
 	"douyin_service/global"
 	"douyin_service/internal/model"
+	"douyin_service/pkg/oss"
 	"douyin_service/pkg/upload"
 	"douyin_service/pkg/util"
+	"os/exec"
+	"strings"
 
 	"errors"
 	"fmt"
@@ -110,9 +113,38 @@ func (svc *Service) PublishAction(data *multipart.FileHeader, token, title strin
 		return err
 	}
 	playUrl := util.UrlJoin(global.AppSetting.UploadServerUrl, strconv.Itoa(int(userId)), fileName)
-	coverUrl := util.UrlJoin(global.AppSetting.UploadServerUrl, "storage/uploads/0e482ed928f6c6a3b033a94d9bc4f82.jpg")
 
-	err := svc.dao.PublishVideo(userId, playUrl, coverUrl, title)
+	// 获取视频封面并上传
+	coverName := fmt.Sprintf("%s.png", upload.GetFilenameWithoutExt(fileName))
+	cdst := path.Join(uploadSavePath, coverName)
+	var coverUrl string
+	if err := upload.ExactCoverFromVideo(dst, cdst); err != nil {
+		// 提取封面失败
+		if strings.HasSuffix(err.Error(), exec.ErrNotFound.Error()) {
+			coverUrl = "https://c-ssl.dtstatic.com/uploads/item/201803/13/20180313083933_olurq.thumb.1000_0.jpg"
+		} else {
+			return err
+		}
+	} else {
+		coverUrl = util.UrlJoin(global.AppSetting.UploadServerUrl, global.AppSetting.UploadSavePath, strconv.Itoa(int(userId)), coverName)
+	}
+
+	// 更新数据库, 检查一下底下两个路径是否正确
+	imgPath := util.UrlJoin(global.AppSetting.UploadSavePath, strconv.Itoa(int(userId)), coverName)
+	videoPath := util.UrlJoin(global.AppSetting.UploadSavePath, strconv.Itoa(int(userId)), fileName)
+	pre := "https://douyin-mini12306.oss-cn-beijing.aliyuncs.com/" // OSS地址前缀
+	err := oss.UploadOSS(videoPath, "video/" + fileName) // 上传视频
+	if err == nil {
+		playUrl = pre + "video/" + fileName
+
+	}
+	err = oss.UploadOSS(imgPath, "img/" + coverName)  //上传封面
+	if err == nil {
+		coverUrl = pre + "img/"+ coverName
+	}
+
+	// 下面的playUrl和coverUrl换成OSS地址
+	err = svc.dao.PublishVideo(userId, playUrl, coverUrl, title)
 
 	return err
 }
