@@ -1,6 +1,7 @@
 package model
-
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Follow struct {
 	*Model
@@ -28,4 +29,14 @@ func (f Follow) IsExist(db *gorm.DB) (bool, error) {
 		return false, nil
 	}
 	return true, nil
+}
+
+func (f Follow) QueryFollowList(db *gorm.DB, userId uint) (follows []Follow, err error) {
+	err = db.Where("follower_id = ?", userId).Find(&follows).Error
+	return
+}
+
+func (f Follow) QueryFollowerList(db *gorm.DB, userId uint) (follows []Follow, err error) {
+	err = db.Where("followed_id = ?", userId).Find(&follows).Error
+	return
 }
