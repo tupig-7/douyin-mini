@@ -22,6 +22,9 @@ var (
 
 	// Follow
 	ErrorFollowActionFail = NewError(10040001, "关注用户失败")
+	ErrorListFollowFail   = NewError(10040002, "获取关注列表错误")
+	ErrorListFollowerFail   = NewError(10040003, "获取粉丝列表错误")
+	ErrorListFriendFail   = NewError(10040004, "获取好友列表错误")
 
 	// comment
 	ErrorListCommentFail   = NewError(10030001, "获取视频的评论列表错误")

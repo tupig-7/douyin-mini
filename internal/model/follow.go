@@ -40,3 +40,16 @@ func (f Follow) QueryFollowerList(db *gorm.DB, userId uint) (follows []Follow, e
 	err = db.Where("followed_id = ?", userId).Find(&follows).Error
 	return
 }
+
+func (f Follow) QueryFriendList(db *gorm.DB) (follows []Follow, err error) {
+	var follwer []Follow
+	err = db.Where("followed_id = ?", f.FollowedId).Find(&follwer).Error // 找出所有的粉丝
+	for _, v := range follwer {
+		var x int64
+		err = db.Where("follower_id = ? and followed_id = ?", v.FollowerId, f.FollowedId).Count(&x).Error
+		if x > 0 {
+			follows = append(follows, v)
+		}
+	}
+	return
+}
