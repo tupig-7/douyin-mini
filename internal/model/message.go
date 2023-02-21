@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -26,9 +25,8 @@ func (m *Message) Update(db *gorm.DB) error {
 
 func (m *Message) ListByToUserId(db *gorm.DB) ([]Message, error) {
 	var msgs []Message
-	fmt.Println("111", m.ToUserId)
 	var err error
-	if err = db.Where("to_user_id = ?", m.ToUserId).Find(&msgs).Error; err != nil {
+	if err = db.Where("to_user_id = ? and from_user_id = ?", m.ToUserId, m.FromUserId).Find(&msgs).Error; err != nil {
 		return nil, err
 	}
 	return msgs, nil

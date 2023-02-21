@@ -83,21 +83,23 @@ func (u User) Get(c *gin.Context) {
 	//	global.Logger.Errorf("svc.GetFavoriteCountById err: %v", err)
 	//}
 
-	// isFollowReq := service.IsFollowRequest{
-	// 	A: param.UserId,
-	// 	B: user.ID,
-	// }
-	// flag, err := svc.IsFollow(isFollowReq)
-	// if err != nil {
-	// 	global.Logger.Errorf("svc.IsFollow err: %v", err)
-	// }
+	//isFollowReq := service.IsFollowRequest{
+	//	A: param.UserId,
+	//	B: user.ID,
+	//}
+	//flag, err := svc.IsFollow(isFollowReq)
+	//if err != nil {
+	//	global.Logger.Errorf("svc.IsFollow err: %v", err)
+	//}
+	flag := false
+
 	res = service.GetUserInfoResponse{
 		User: &service.UserInfo{
 			ID:              user.ID,
 			Name:            user.UserName,
 			FollowCount:     user.FollowCount,
 			FollowerCount:   user.FollowerCount,
-			IsFollow:        false,
+			IsFollow:        flag,
 			Avatar:          user.Avatar,
 			Signature:       user.Signature,
 			BackgroundImage: user.BackgroundImage,

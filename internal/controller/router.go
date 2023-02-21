@@ -34,14 +34,20 @@ func NewRouter() *gin.Engine {
 
 	user := v1.NewUser()
 	publish := v1.NewPublish()
-	// msg := v1.NewMsg()
+	favorite := v1.NewFavorite()
 	msg := v1.NewMsg()
 	cmt := v1.NewComment()
+	feed := v1.NewFeed()
 	apiv1 := r.Group("/douyin/")
 	apiv1.Use()
 	{
 		// user
 		apiv1.POST("/user/login/", user.Login)
+		apiv1.POST("/user/register/", user.Register)
+		apiv1.GET("/user/", user.Get)
+
+		// feed
+		apiv1.GET("/feed/", feed.Feed)
 		apiv1.POST("/user/register/", user.Register)
 		apiv1.GET("/user/", user.Get)
 
@@ -51,11 +57,15 @@ func NewRouter() *gin.Engine {
 
 		// comment
 		apiv1.GET("/comment/list/", cmt.List)
+		apiv1.POST("/comment/action", cmt.Action)
 		// publish
 		apiv1.POST("/publish/action/", publish.Action)
+
+		// favorite
+		apiv1.GET("/favorite/list/", favorite.List)
+		apiv1.POST("/favorite/action/", favorite.Action)
 		apiv1.POST("/publish/list/", publish.List)
 
 	}
-
 	return r
 }

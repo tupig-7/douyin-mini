@@ -14,7 +14,7 @@ func init()  {
 }
 
 func TestGenerateToken(t *testing.T) {
-	token, err := GenerateToken("douyin", "douyin", "1")
+	token, err := GenerateToken("douyin", "douyin", "39")
 	if err != nil {
 		t.Error(err)
 	}
@@ -22,7 +22,7 @@ func TestGenerateToken(t *testing.T) {
 }
 
 func TestParseToken(t *testing.T) {
-	token, err := GenerateToken("douyin", "douyin", "2")
+	token, err := GenerateToken("douyin", "douyin", "39")
 	if err != nil {
 		t.Error(err)
 	}

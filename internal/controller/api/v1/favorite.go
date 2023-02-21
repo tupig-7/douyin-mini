@@ -5,26 +5,21 @@ import (
 	"douyin_service/internal/service"
 	"douyin_service/pkg/app"
 	"douyin_service/pkg/errcode"
-
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-type Favorite struct {
-}
+type Favorite struct{}
 
 func NewFavorite() Favorite {
 	return Favorite{}
 }
 
-// Action 登录用户对视频的点赞和取消点赞操作
-func (f Favorite) Action(c *gin.Context) {
-	//获取请求参数
-	param := service.ActionRequest{}
+func (f *Favorite) Action(c *gin.Context) {
+	param := service.FavoriteActionRequest{}
 	response := app.NewResponse(c)
-	var res service.ActionResponse
-
+	var res service.FavoriteActionResponse
 	valid, errs := app.BindAndValid(c, &param)
 	if !valid {
 		global.Logger.Errorf("app.BindAndValid errs: %v", errs)
@@ -32,13 +27,15 @@ func (f Favorite) Action(c *gin.Context) {
 		return
 	}
 
-	// token 不合理
 	valid, tokenErr := app.ValidToken(param.Token, errcode.SkipCheckUserID)
 	if !valid {
 		global.Logger.Errorf("app.ValidToken errs: %v", tokenErr)
-		response.ToErrorResponse(tokenErr)
+		res.StatusCode = tokenErr.Code()
+		res.StatusMsg = tokenErr.Msg()
+		response.ToResponse(res)
 		return
 	}
+
 	// 从token中获取user_id
 	claims, err := app.ParseToken(param.Token)
 	if err != nil {
@@ -47,60 +44,67 @@ func (f Favorite) Action(c *gin.Context) {
 		return
 	}
 	userId, _ := strconv.Atoi(claims.Audience)
-
 	svc := service.New(c.Request.Context())
-	err2 := svc.Action(&param, uint(userId))
-	if err2 != nil {
-		global.Logger.Errorf("svc.Action err: %v", err2)
-		response.ToErrorResponse(errcode.ErrorActionFail)
+
+	param.UserId = uint(userId)
+	if param.ActionType == 1 {
+		err = svc.CreateFavorite(&param)
+		if err != nil {
+			global.Logger.Errorf("svc.CreateFavorite errs: %v", err)
+			response.ToErrorResponse(errcode.ErrorActionFavoriteFail)
+			return
+		}
+		res.StatusCode = 0
+		res.StatusMsg = "喜欢"
+		response.ToResponse(res)
+		return
+	} else if param.ActionType == 2 {
+		err = svc.CancelFavorite(&param)
+		if err != nil {
+			global.Logger.Errorf("svc.CancelFavorite errs: %v", err)
+			response.ToErrorResponse(errcode.ErrorActionFavoriteFail)
+			return
+		}
+
+		res.StatusCode = 0
+		res.StatusMsg = "取消点赞"
+		response.ToResponse(res)
 		return
 	}
-	res.StatusCode = 0
-	res.StatusMsg = "操作成功"
-	response.ToResponse(res)
 }
 
-// // FavoriteList 登录用户点赞列表
-// func (f Favorite) FavoriteList(c *gin.Context) {
-// 	param := service.FavoriteListRequest{}
-// 	response := app.NewResponse(c)
-// 	var res service.FavoriteListResponse
+func (f *Favorite) List(c *gin.Context) {
+	param := service.FavoriteListRequest{}
+	response := app.NewResponse(c)
+	var res service.FavoriteListResponse
+	valid, errs := app.BindAndValid(c, &param)
+	if !valid {
+		global.Logger.Errorf("app.BindAndValid errs: %v", errs)
+		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
+		return
+	}
 
-// 	valid, errs := app.BindAndValid(c, &param)
-// 	if !valid {
-// 		global.Logger.Errorf("app.BindAndValid errs: %v", errs)
-// 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
-// 		return
-// 	}
+	valid, tokenErr := app.ValidToken(param.Token, errcode.SkipCheckUserID)
+	if !valid {
+		global.Logger.Errorf("app.ValidToken errs: %v", tokenErr)
+		res.StatusCode = tokenErr.Code()
+		res.StatusMsg = tokenErr.Msg()
+		response.ToResponse(res)
+		return
+	}
 
-// 	// if len(param.Token) == 0 {
-// 	// 	//获取不到token说明未登录
-// 	// 	res.StatusCode = 0
-// 	// 	res.StatusMsg = "操作成功"
-// 	// 	res.VideoList = nil
-// 	// 	response.ToResponse(res)
-// 	// 	return
-// 	// }
+	svc := service.New(c.Request.Context())
+	fvtList, err := svc.FavoriteList(&param)
+	resp := &service.FavoriteListResponse{}
+	if err != nil {
+		res.StatusCode = errcode.ErrorListFavoriteFail.Code()
+		res.StatusMsg = errcode.ErrorListFavoriteFail.Msg()
+		response.ToResponse(res)
+		return
+	}
 
-// 	// token不合法
-// 	valid, err := app.ValidToken(param.Token, strconv.Itoa(int(param.UserId)))
-// 	if !valid {
-// 		global.Logger.Errorf("app.ValidToken errs: %v", err)
-// 		res.StatusCode = errcode.ErrorLoginExpire.Code()
-// 		res.StatusMsg = errcode.ErrorLoginExpire.Msg()
-// 		response.ToResponse(res)
-// 		return
-// 	}
-
-// 	svc := service.New(c.Request.Context())
-// 	favoriteList, err2 := svc.FavoriteList(&param)
-// 	if err2 != nil {
-// 		global.Logger.Errorf("svc.GetUserById err: %v", err2)
-// 		response.ToResponse(errcode.ErrorActionListFail)
-// 		return
-// 	}
-// 	res.StatusCode = 0
-// 	res.StatusMsg = "操作成功"
-// 	res.VideoList = favoriteList
-// 	response.ToResponse(res)
-// }
+	fvtList.StatusCode = 0
+	fvtList.StatusMsg = "获取喜欢列表成功"
+	resp = &fvtList
+	response.ToResponse(resp)
+}

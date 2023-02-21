@@ -2,71 +2,59 @@ package dao
 
 import (
 	"douyin_service/internal/model"
+	"time"
 )
 
-// dao的favorite相关操作（全部走数据库）
-
-// 插入该条点赞信息数据
-func (d *Dao) FavorAction(userId uint, videoId uint) error {
-	favorite := model.Favorite{
+// CreateFavorite 创建点赞
+func (d *Dao) CreateFavorite(userId, videoId uint) (model.Favorite, error) {
+	fvt := model.Favorite{
+		Model: &model.Model{
+			CreatedAt: time.Now().Unix(),
+			UpdatedAt: time.Now().Unix(),
+		},
 		UserId:  userId,
 		VideoId: videoId,
 	}
-	err := favorite.Create(d.engine)
+	err := fvt.Create(d.engine)
+	if err != nil {
+		return fvt, err
+	}
+	return fvt, nil
+}
+
+// CancelFavorite 取消点赞
+func (d *Dao) CancelFavorite(userId, videoId uint) error {
+	fvt := model.Favorite{
+		Model: &model.Model{
+			CreatedAt: time.Now().UnixMilli(),
+			UpdatedAt: time.Now().UnixMilli(),
+		},
+		UserId:  userId,
+		VideoId: videoId,
+	}
+	err := fvt.Delete(d.engine)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// 取消该条点赞
-func (d *Dao) CancelFavorAction(userId uint, videoId uint) error {
-	favorite := model.Favorite{
-		UserId:  userId,
-		VideoId: videoId,
-	}
-	err := favorite.Delete(d.engine)
+func (d *Dao) QueryVideoInfoById(videoId uint) (model.Video, error) {
+	var video model.Video
+	v, err := video.QueryVideoById(videoId, d.engine)
 	if err != nil {
-		return err
+		return video, err
 	}
-	return nil
+	return v, nil
 }
 
-// 判断是否存在点赞
-func (d *Dao) IsFavor(userId uint, videoId uint) (bool, error) {
-	favorite := model.Favorite{
-		UserId:  userId,
-		VideoId: videoId,
-	}
-	ok, err := favorite.IsFavor(d.engine)
-	if err != nil {
-		return false, err
-	}
-	return ok, err
-
-}
-
-// 查询视频获赞量
-func (d *Dao) QueryFavoritedCnt(videoId uint) (int64, error) {
-	favorite := model.Favorite{
-		VideoId: videoId,
-	}
-	cnt, err := favorite.QueryFavoritedCnt(d.engine)
-	if err != nil {
-		return 0, err
-	}
-	return cnt, nil
-}
-
-// 查询用户喜欢的视频列表
-func (d *Dao) QueryFavoriteByUserId(userId uint) ([]uint, error) {
-	favorite := model.Favorite{
-		UserId: userId,
-	}
-
-	userIds, err := favorite.QueryFavoriteByUserId(d.engine)
+// GetFavoritesByUserId 获取所有点赞的视频id
+func (d *Dao) GetFavoritesByUserId(userId uint) ([]uint, error) {
+	f := model.Favorite{UserId: userId}
+	videoIds, err := f.QueryFavoriteByUserId(d.engine) // 获取点赞的所有视频id
 	if err != nil {
 		return nil, err
 	}
-	return userIds, nil
+
+	return videoIds, nil
 }

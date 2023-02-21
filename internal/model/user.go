@@ -4,8 +4,6 @@ import (
 	"douyin_service/pkg/app"
 	"douyin_service/pkg/errcode"
 	"douyin_service/pkg/util"
-	"fmt"
-
 	"gorm.io/gorm"
 )
 
@@ -82,7 +80,7 @@ func (u User) CheckUser(db *gorm.DB) (uint, bool, error) {
 
 func (u User) GetUserById(db *gorm.DB) (User, error) {
 	var user User
-	if err := db.Where("id = ?", u.ID).Find(&user).Error; err != nil {
+	if err := db.Where("id = ?", u.ID).First(&user).Error; err != nil {
 		return user, err
 	}
 	return user, nil
@@ -105,8 +103,8 @@ func (u User) GetUserByEmail(db *gorm.DB) (User, error) {
 	return user, nil
 }
 
-func (u User) UpdateIP(db *gorm.DB) error {
-	err := db.Model(&User{}).Where("id = ?", u.ID).Update("login_ip", u.LoginIP).Error
-	fmt.Println("err: ", err)
-	return err
-}
+//func (u User) UpdateIP(db *gorm.DB) error {
+//	err := db.Model(&User{}).Where("id = ?", u.ID).Update("login_ip", u.LoginIP).Error
+//	fmt.Println("err: ", err)
+//	return err
+//}
