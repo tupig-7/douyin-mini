@@ -95,3 +95,13 @@ func (svc *Service) FavoriteList(param *FavoriteListRequest) (FavoriteListRespon
 	fvtResp.VideoList = videos
 	return fvtResp, nil
 }
+
+// IsFavor 查询是否点赞的功能
+// 由于用户对哪些视频点赞使用bitmap存储到redis中，因此直接在redis查询。
+func (svc *Service) IsFavor(userId uint, videoId uint) (bool, error) {
+	return svc.dao.IsFavor(userId, videoId)
+}
+
+func (svc *Service) QueryFavorCnt(videoId uint) (int64, error) {
+	return svc.dao.QueryFavorCnt(videoId)
+}

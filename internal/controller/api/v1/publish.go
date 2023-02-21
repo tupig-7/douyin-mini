@@ -5,6 +5,7 @@ import (
 	"douyin_service/internal/service"
 	"douyin_service/pkg/app"
 	"douyin_service/pkg/errcode"
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -18,6 +19,7 @@ func NewPublish() Publish {
 
 // 获取用户的视频发布列表
 func (p Publish) List(c *gin.Context) {
+	fmt.Println("笑嘻嘻")
 	param := service.PublishListRequest{}
 	response := app.NewResponse(c)
 	valid, errs := app.BindAndValid(c, &param)

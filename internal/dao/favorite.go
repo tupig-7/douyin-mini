@@ -58,3 +58,13 @@ func (d *Dao) GetFavoritesByUserId(userId uint) ([]uint, error) {
 
 	return videoIds, nil
 }
+
+func (d *Dao) QueryFavorCnt(videoId uint) (int64, error) {
+	f := model.Favorite{VideoId: videoId}
+	return f.QueryFavoritedCnt(d.engine)
+}
+
+func (d *Dao) IsFavor(userId, videoId uint) (bool, error) {
+	f := model.Favorite{UserId: userId, VideoId: videoId}
+	return f.IsFavor(d.engine)
+}
