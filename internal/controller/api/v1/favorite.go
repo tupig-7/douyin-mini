@@ -60,7 +60,7 @@ func (f *Favorite) Action(c *gin.Context) {
 	} else if param.ActionType == 2 {
 		err = svc.CancelFavorite(&param)
 		if err != nil {
-			global.Logger.Errorf("svc.DeleteComment errs: %v", err)
+			global.Logger.Errorf("svc.CancelFavorite errs: %v", err)
 			response.ToErrorResponse(errcode.ErrorActionFavoriteFail)
 			return
 		}
