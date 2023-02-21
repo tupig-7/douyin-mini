@@ -12,9 +12,9 @@ require (
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/google/uuid v1.3.0
+	github.com/importcjj/sensitive v0.0.0-20200106142752-42d1c505be7b
 	github.com/juju/ratelimit v1.0.1
 	github.com/mattn/go-colorable v0.1.12
-	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.12.0
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
