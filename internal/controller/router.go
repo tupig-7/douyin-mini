@@ -34,6 +34,7 @@ func NewRouter() *gin.Engine {
 
 	user := v1.NewUser()
 	msg := v1.NewMsg()
+	cmt := v1.NewComment()
 	apiv1 := r.Group("/douyin/")
 	apiv1.Use()
 	{
@@ -43,6 +44,9 @@ func NewRouter() *gin.Engine {
 		// message
 		apiv1.GET("/message/chat", msg.Chat)
 		apiv1.POST("/message/action", msg.Action)
+
+		// comment
+		apiv1.GET("/comment/list/", cmt.List)
 	}
 
 

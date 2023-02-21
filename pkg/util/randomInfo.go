@@ -18,10 +18,11 @@ type Data struct {
 }
 
 type BackgroundImg struct {
-	Error  int    `json:"error"`
-	Result int    `json:"result"`
-	Width  int    `json:"width"`
-	Height int    `json:"height"`
+	Error  string    `json:"error"`
+	Result string    `json:"result"`
+	Width  string    `json:"width"`
+	Height string    `json:"height"`
+	Format string `json:"format"`
 	Img    string `json:"img"`
 }
 
