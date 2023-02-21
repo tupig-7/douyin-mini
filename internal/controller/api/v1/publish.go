@@ -16,39 +16,6 @@ func NewPublish() Publish {
 	return Publish{}
 }
 
-// 获取用户的视频发布列表这个gin是干啥的来着？？？
-func (p Publish) List(c *gin.Context) {
-	param := service.PublishListRequest{}
-	response := app.NewResponse(c)
-	valid, errs := app.BindAndValid(c, &param)
-	if !valid {
-		global.Logger.Errorf("app.BindAndValid errs: %v", errs)
-		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
-		return
-	}
-
-	valid, tokenErr := app.ValidToken(param.Token, errcode.SkipCheckUserID)
-
-	// token不合法
-	if !valid {
-		global.Logger.Errorf("app.ValidToken errs: %v", tokenErr)
-		response.ToResponse(tokenErr)
-	}
-
-	svc := service.New(c.Request.Context())
-	resp, err := svc.PublishList(param.UserId)
-	// 发布失败
-	if err != nil {
-		global.Logger.Errorf("svc.PublishList err:%v", err)
-		response.ToErrorResponse(errcode.ErrorListPublishFail)
-		return
-	}
-	// 发布成功
-	resp.StatusCode = 0
-	resp.StatusMsg = "获取用户的视频发布列表成功"
-	response.ToResponse(resp)
-}
-
 // 发布视频
 func (p Publish) Action(c *gin.Context) {
 	data, _ := c.FormFile("data")

@@ -47,46 +47,6 @@ type PublishActionRequest struct {
 
 var video_lock sync.Mutex
 
-func (svc *Service) PublishList(userId uint) (pubResp PublishListResponse, err error) {
-	// 根据用户id获取发布视频信息
-	video, err := svc.dao.ListVideoByUserId(userId)
-	if err != nil {
-		return
-	}
-
-	// 根据用户id获取用户自身信息
-	user, err := svc.dao.GetUserById(userId)
-	if err != nil {
-		return
-	}
-
-	// 遍历赋值
-	pubResp.VideoList = make([]VideoInfo, len(video))
-	for i := range video {
-		isFavorite, _ := svc.IsFavor(userId, video[i].ID)
-		favoriteCnt, _ := svc.QueryFavorCnt(video[i].ID)
-		isFollow := false
-		// isFollow, _ := svc.dao.IsFollow(userId, video[i].AuthorId)
-		pubResp.VideoList[i] = VideoInfo{
-			Id: video[i].ID,
-			Author: UserInfo{
-				ID:            user.ID,
-				Name:          user.UserName,
-				FollowCount:   user.FollowCount,
-				FollowerCount: user.FollowerCount,
-				IsFollow:      isFollow,
-			},
-			PlayUrl:       video[i].PlayUrl,
-			CoverUrl:      video[i].CoverUrl,
-			FavoriteCount: favoriteCnt,
-			CommentCount:  video[i].CommentCount,
-			IsFavorite:    isFavorite,
-			Title:         video[i].Title,
-		}
-	}
-	return
-}
-
 // 发布视频的大动作
 func (svc *Service) PublishAction(data *multipart.FileHeader, token, title string, userId uint) error {
 	// 上传校验

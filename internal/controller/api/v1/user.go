@@ -82,11 +82,12 @@ func (u User) Get(c *gin.Context) {
 	//	global.Logger.Errorf("svc.GetFavoriteCountById err: %v", err)
 	//}
 
-	isFollowReq := service.IsFollowRequest{
-		A: param.UserId,
-		B: user.ID,
-	}
-	flag, err := svc.IsFollow(isFollowReq)
+	//isFollowReq := service.IsFollowRequest{
+	//	A: param.UserId,
+	//	B: user.ID,
+	//}
+	//flag, err := svc.IsFollow(isFollowReq)
+	flag := false
 	if err != nil {
 		global.Logger.Errorf("svc.IsFollow err: %v", err)
 	}
