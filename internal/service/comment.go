@@ -2,7 +2,7 @@ package service
 
 // CommentListRequest 视频评论列表请求
 type CommentListRequest struct {
-	Token  string `form:"token" binding:"required"`
+	Token string `form:"token" binding:"required"`
 	// 视频id
 	VideoId uint `form:"video_id" binding:"required"`
 }
@@ -15,27 +15,27 @@ type CommentListResponse struct {
 
 // CommentInfo 单条评论信息
 type CommentInfo struct {
-	ID uint `json:"id"`
-	User UserInfo `json:"user"`
-	Content string `json:"content"`
+	ID      uint     `json:"id"`
+	User    UserInfo `json:"user"`
+	Content string   `json:"content"`
 	// 评论发布日期：mm-dd
 	CreateDate string `json:"create_date"`
 }
 
-// UserInfo 用户信息
-type UserInfo struct {
-	ID uint `json:"id"`
-	Name string `json:"name"`
-	FollowCount int64 `json:"follow_count"`
-	FollowerCount int64 `json:"follower_count"`
-	IsFollow bool `json:"is_follow"`
-	Avatar string `json:"avatar"`
-	BackgroundImage string `json:"background_image"`
-	Signature string `json:"signature"`
-	TotalFavorited int64 `json:"total_favorited"`
-	WorkCount int64 `json:"work_count"`
-	FavoriteCount int64 `json:"favorite_count"`
-}
+// // UserInfo 用户信息
+// type UserInfo struct {
+// 	ID uint `json:"id"`
+// 	Name string `json:"name"`
+// 	FollowCount int64 `json:"follow_count"`
+// 	FollowerCount int64 `json:"follower_count"`
+// 	IsFollow bool `json:"is_follow"`
+// 	Avatar string `json:"avatar"`
+// 	BackgroundImage string `json:"background_image"`
+// 	Signature string `json:"signature"`
+// 	TotalFavorited int64 `json:"total_favorited"`
+// 	WorkCount int64 `json:"work_count"`
+// 	FavoriteCount int64 `json:"favorite_count"`
+// }
 
 // CommentList 视频评论列表
 func (svc *Service) CommentList(param *CommentListRequest) (CommentListResponse, error) {
@@ -55,8 +55,8 @@ func (svc *Service) CommentList(param *CommentListRequest) (CommentListResponse,
 			return CommentListResponse{}, err
 		}
 		cmtListResp.CommentList = append(cmtListResp.CommentList, CommentInfo{
-			ID:         c.ID,
-			User:       UserInfo{
+			ID: c.ID,
+			User: UserInfo{
 				ID:              user.ID,
 				Name:            user.UserName,
 				FollowCount:     user.FollowCount,
