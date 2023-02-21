@@ -5,7 +5,7 @@ import (
 )
 
 type FavoriteActionRequest struct {
-	Token  string `form:"token" binding:"required"`
+	Token string `form:"token" binding:"required"`
 	// 用户Id
 	UserId uint
 	// 视频id
@@ -48,7 +48,6 @@ func (svc *Service) CancelFavorite(param *FavoriteActionRequest) error {
 	return nil
 }
 
-
 // FavoriteList 查询视频列表
 func (svc *Service) FavoriteList(param *FavoriteListRequest) (FavoriteListResponse, error) {
 	var fvtResp FavoriteListResponse
@@ -69,8 +68,8 @@ func (svc *Service) FavoriteList(param *FavoriteListRequest) (FavoriteListRespon
 		}
 		isFollow, err := svc.dao.IsFollow(video.AuthorId, user.ID)
 		videoInfo := VideoInfo{
-			Id:            video.ID,
-			Author:        UserInfo{
+			Id: video.ID,
+			Author: UserInfo{
 				ID:              user.ID,
 				Name:            user.UserName,
 				FollowCount:     user.FollowCount,

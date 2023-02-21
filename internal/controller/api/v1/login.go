@@ -21,7 +21,7 @@ func (u User) Login(c *gin.Context) {
 		return
 	}
 	svc := service.New(c.Request.Context())
-	userId, flag, err := svc.Login(&param)
+	userId, _, err := svc.Login(&param)
 	res := &service.LoginResponse{
 		UserID: userId,
 		Token:  "",
@@ -34,11 +34,11 @@ func (u User) Login(c *gin.Context) {
 		return
 	}
 
-	if !flag {
-		global.Logger.Error("用户名/密码错误")
-		response.ToResponse(res)
-		return
-	}
+	// if !flag {
+	// 	global.Logger.Error("用户名/密码错误")
+	// 	response.ToResponse(res)
+	// 	return
+	// }
 	idStr := strconv.Itoa(int(userId))
 	token, err := app.GenerateToken(global.JWTSetting.Key, global.JWTSetting.Secret, idStr)
 	if err != nil {

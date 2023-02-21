@@ -5,6 +5,7 @@ import (
 	"douyin_service/internal/service"
 	"douyin_service/pkg/app"
 	"douyin_service/pkg/errcode"
+
 	"github.com/gin-gonic/gin"
 )
 

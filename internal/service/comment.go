@@ -97,13 +97,13 @@ func (svc *Service) CreateComment(param *CommentActionRequest) (CommentActionRes
 }
 
 // DeleteComment 删除评论
-func (svc *Service) DeleteComment(param *CommentActionRequest) (error) {
+func (svc *Service) DeleteComment(param *CommentActionRequest) error {
 	//var cmtResp CommentActionResponse
 	err := svc.dao.DeleteComment(param.CommentId)
 	if err != nil {
 		return err
 	}
-	return  nil
+	return nil
 	//user, err := svc.dao.GetUserById(uint(cmt.UserId))
 	//if err != nil {
 	//	return CommentActionResponse{}, err

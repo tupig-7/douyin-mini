@@ -72,3 +72,9 @@ func (v Video) QueryFavorCntById(db *gorm.DB) (int64, error) {
 	err := db.Model(&v).Select("favorite_count").Find(&cnt).Error
 	return cnt, err
 }
+
+func (v Video) QueryAuthorIdByVideoId(db *gorm.DB) (uint, error) {
+	var authorId uint
+	err := db.Model(&v).Select("author_id").Where("id = ?", v.ID).Find(&authorId).Error
+	return authorId, err
+}

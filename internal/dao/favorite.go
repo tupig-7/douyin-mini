@@ -6,9 +6,9 @@ import (
 )
 
 // CreateFavorite 创建点赞
-func (d *Dao) CreateFavorite(userId, videoId uint) (model.Favorite, error)  {
+func (d *Dao) CreateFavorite(userId, videoId uint) (model.Favorite, error) {
 	fvt := model.Favorite{
-		Model:   &model.Model{
+		Model: &model.Model{
 			CreatedAt: time.Now().Unix(),
 			UpdatedAt: time.Now().Unix(),
 		},
@@ -23,9 +23,9 @@ func (d *Dao) CreateFavorite(userId, videoId uint) (model.Favorite, error)  {
 }
 
 // CancelFavorite 取消点赞
-func (d *Dao) CancelFavorite(userId, videoId uint) error  {
+func (d *Dao) CancelFavorite(userId, videoId uint) error {
 	fvt := model.Favorite{
-		Model:   &model.Model{
+		Model: &model.Model{
 			CreatedAt: time.Now().UnixMilli(),
 			UpdatedAt: time.Now().UnixMilli(),
 		},
@@ -43,9 +43,9 @@ func (d *Dao) QueryVideoInfoById(videoId uint) (model.Video, error) {
 	var video model.Video
 	v, err := video.QueryVideoById(videoId, d.engine)
 	if err != nil {
-		return  video, err
+		return video, err
 	}
-	return  v, nil
+	return v, nil
 }
 
 // GetFavoritesByUserId 获取所有点赞的视频id

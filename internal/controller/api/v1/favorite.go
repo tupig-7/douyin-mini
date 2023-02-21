@@ -5,14 +5,15 @@ import (
 	"douyin_service/internal/service"
 	"douyin_service/pkg/app"
 	"douyin_service/pkg/errcode"
-	"github.com/gin-gonic/gin"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
-type Favorite struct { }
+type Favorite struct{}
 
-func NewFavorite() Favorite  {
-	return  Favorite{}
+func NewFavorite() Favorite {
+	return Favorite{}
 }
 
 func (f *Favorite) Action(c *gin.Context) {
@@ -72,7 +73,7 @@ func (f *Favorite) Action(c *gin.Context) {
 	}
 }
 
-func (f *Favorite) List(c *gin.Context)  {
+func (f *Favorite) List(c *gin.Context) {
 	param := service.FavoriteListRequest{}
 	response := app.NewResponse(c)
 	var res service.FavoriteListResponse
@@ -97,7 +98,7 @@ func (f *Favorite) List(c *gin.Context)  {
 	resp := &service.FavoriteListResponse{}
 	if err != nil {
 		res.StatusCode = errcode.ErrorListFavoriteFail.Code()
-		res.StatusMsg =  errcode.ErrorListFavoriteFail.Msg()
+		res.StatusMsg = errcode.ErrorListFavoriteFail.Msg()
 		response.ToResponse(res)
 		return
 	}
