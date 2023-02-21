@@ -52,6 +52,34 @@ func (d *Dao) GetUserById(userId uint) (model.User, error) {
 	return user.GetUserById(d.engine)
 }
 
+func (d *Dao) GetUserFollowCnt(userId uint) (bool, int64, error) {
+	user := model.User{
+		Model: &model.Model{
+			ID: userId,
+		},
+	}
+	uu, err := user.GetUserById(d.engine)
+	if err != nil {
+		return false, 0, err
+	}
+	cnt := uu.FollowCount
+	return true, cnt, nil
+}
+
+func (d *Dao) GetUserFanCnt(userId uint) (bool, int64, error) {
+	user := model.User{
+		Model: &model.Model{
+			ID: userId,
+		},
+	}
+	uu, err := user.GetUserById(d.engine)
+	if err != nil {
+		return false, 0, err
+	}
+	cnt := uu.FollowerCount
+	return true, cnt, nil
+}
+
 func (d *Dao) GetUsersByIds(userIds []uint) ([]model.User, error) {
 	var user model.User
 	users, err := user.GetUsersByIds(userIds, d.engine)
