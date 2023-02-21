@@ -1,5 +1,4 @@
 package model
-
 import (
 	"gorm.io/gorm"
 )
@@ -22,6 +21,7 @@ func (f Follow) Delete(db *gorm.DB) error {
 	return db.Where("followed_id = ? And follower_id = ?", f.FollowedId, f.FollowerId).Delete(&f).Error
 }
 
+// IsExist 是否已经关注
 func (f Follow) IsExist(db *gorm.DB) (bool, error) {
 	var follows []Follow
 	db.Where("followed_id = ? and follower_id = ?", f.FollowedId, f.FollowerId).Find(&follows)

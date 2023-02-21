@@ -20,8 +20,9 @@ type ResponseCommon struct {
 
 func New(ctx context.Context) Service {
 	svc := Service{
-		ctx: ctx,
-		dao: dao.New(global.DBEngine),
+		ctx:   ctx,
+		dao:   dao.New(global.DBEngine),
+		redis: cache.NewRedis(global.Rd),
 	}
 	return svc
 }
