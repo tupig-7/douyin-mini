@@ -6,7 +6,8 @@ import (
 	"douyin_service/pkg/util"
 )
 
-func (d *Dao) CreateUser(userName, password, loginIP string) (uint, error) {
+// 去除ip
+func (d *Dao) CreateUser(userName, password string) (uint, error) {
 	sign, err := util.RandomSign()
 	if err != nil {
 		return errcode.ErrorUserID, err
@@ -23,7 +24,7 @@ func (d *Dao) CreateUser(userName, password, loginIP string) (uint, error) {
 		Avatar:          util.RandomAvatar(userName),
 		Signature:       sign,
 		BackgroundImage: img,
-		LoginIP:         loginIP,
+		LoginIP:         "",
 	}
 	err = user.Create(d.engine)
 	if err != nil {
@@ -67,15 +68,15 @@ func (d *Dao) GetUserByEmail(username string) (model.User, error) {
 	return user.GetUserByEmail(d.engine)
 }
 
-func (d Dao) UpdateUserLoginIP(userId uint, loginIP string) error {
-	user := model.User{
-		Model: &model.Model{
-			ID: userId,
-		},
-		LoginIP: loginIP,
-	}
-	return user.UpdateIP(d.engine)
-}
+//func (d Dao) UpdateUserLoginIP(userId uint, loginIP string) error {
+//	user := model.User{
+//		Model: &model.Model{
+//			ID: userId,
+//		},
+//		LoginIP: loginIP,
+//	}
+//	return user.UpdateIP(d.engine)
+//}
 
 func (d Dao) UpdateById(userId uint, data map[string]interface{}) error {
 	user := model.User{

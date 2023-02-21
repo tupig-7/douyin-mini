@@ -34,14 +34,22 @@ func NewRouter() *gin.Engine {
 
 	user := v1.NewUser()
 	publish := v1.NewPublish()
+	// msg := v1.NewMsg()
 	apiv1 := r.Group("/douyin/")
 	apiv1.Use()
 	{
 		// user
 		apiv1.POST("/user/login/", user.Login)
+		apiv1.POST("/user/register/", user.Register)
+		apiv1.GET("/user/", user.Get)
+
+		// message
+		// apiv1.GET("/message/chat", msg.Chat)
+		// apiv1.POST("/message/action", msg.Action)
 
 		// publish
 		apiv1.POST("/publish/action/", publish.Action)
+
 	}
 
 	return r
