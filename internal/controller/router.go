@@ -48,6 +48,8 @@ func NewRouter() *gin.Engine {
 
 		// feed
 		apiv1.GET("/feed/", feed.Feed)
+		apiv1.POST("/user/register/", user.Register)
+		apiv1.GET("/user/", user.Get)
 
 		// message
 		apiv1.GET("/message/chat", msg.Chat)
@@ -62,6 +64,8 @@ func NewRouter() *gin.Engine {
 		// favorite
 		apiv1.GET("/favorite/list/", favorite.List)
 		apiv1.POST("/favorite/action/", favorite.Action)
+		apiv1.POST("/publish/list/", publish.List)
+
 	}
 	return r
 }

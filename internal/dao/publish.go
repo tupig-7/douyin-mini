@@ -68,3 +68,9 @@ func (d *Dao) QueryFavorCntById(videoId uint) (int64, error) {
 	video.ID = videoId
 	return video.QueryFavorCntById(d.engine)
 }
+
+func (d *Dao) QueryAuthorIdByVideoId(videoId uint) (uint, error) {
+	var video model.Video
+	video.ID = videoId
+	return video.QueryAuthorIdByVideoId(d.engine)
+}

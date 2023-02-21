@@ -4,20 +4,24 @@ import (
 	"gorm.io/gorm"
 )
 
+// 点赞信息数据库
 type Favorite struct {
 	*Model
 	UserId  uint `json:"user_id"`
 	VideoId uint `json:"video_id"`
 }
 
+// 返回数据库名称
 func (f Favorite) TableName() string {
 	return "douyin_favorite"
 }
 
+// 插入点赞信息数据
 func (f Favorite) Create(db *gorm.DB) error {
 	return db.Create(&f).Error
 }
 
+// 删除具体点赞信息
 func (f Favorite) Delete(db *gorm.DB) error {
 	return db.Model(&f).Where("user_id = ? AND video_id = ?", f.UserId, f.VideoId).Delete(&f).Error
 }
