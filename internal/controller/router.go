@@ -53,6 +53,7 @@ func NewRouter() *gin.Engine {
 		apiv1.GET("/comment/list/", cmt.List)
 		// publish
 		apiv1.POST("/publish/action/", publish.Action)
+		apiv1.POST("/publish/list/", publish.List)
 
 	}
 

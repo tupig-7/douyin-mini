@@ -3,19 +3,15 @@ package service
 import (
 	"douyin_service/global"
 	"douyin_service/internal/model"
-	"douyin_service/pkg/oss"
 	"douyin_service/pkg/upload"
 	"douyin_service/pkg/util"
+
 	"errors"
 	"fmt"
 	"mime/multipart"
 	"os"
-	"os/exec"
 	"path"
 	"strconv"
-	"strings"
-	"sync"
-	"time"
 )
 
 type PublishListRequest struct {
@@ -45,8 +41,9 @@ type PublishActionRequest struct {
 	Title string                `form:"title" binding:"required"`
 }
 
-var video_lock sync.Mutex
+// var video_lock sync.Mutex
 
+// 获取用户发布视频列表
 func (svc *Service) PublishList(userId uint) (pubResp PublishListResponse, err error) {
 	// 根据用户id获取发布视频信息
 	video, err := svc.dao.ListVideoByUserId(userId)
@@ -113,38 +110,9 @@ func (svc *Service) PublishAction(data *multipart.FileHeader, token, title strin
 		return err
 	}
 	playUrl := util.UrlJoin(global.AppSetting.UploadServerUrl, strconv.Itoa(int(userId)), fileName)
+	coverUrl := util.UrlJoin(global.AppSetting.UploadServerUrl, "storage/uploads/0e482ed928f6c6a3b033a94d9bc4f82.jpg")
 
-	// 获取视频封面并上传
-	coverName := fmt.Sprintf("%s.png", upload.GetFilenameWithoutExt(fileName))
-	cdst := path.Join(uploadSavePath, coverName)
-	var coverUrl string
-	if err := upload.ExactCoverFromVideo(dst, cdst); err != nil {
-		// 提取封面失败
-		if strings.HasSuffix(err.Error(), exec.ErrNotFound.Error()) {
-			coverUrl = "https://c-ssl.dtstatic.com/uploads/item/201803/13/20180313083933_olurq.thumb.1000_0.jpg"
-		} else {
-			return err
-		}
-	} else {
-		coverUrl = util.UrlJoin(global.AppSetting.UploadServerUrl, global.AppSetting.UploadSavePath, strconv.Itoa(int(userId)), coverName)
-	}
-
-	// 更新数据库, 检查一下底下两个路径是否正确
-	imgPath := util.UrlJoin(global.AppSetting.UploadSavePath, strconv.Itoa(int(userId)), coverName)
-	videoPath := util.UrlJoin(global.AppSetting.UploadSavePath, strconv.Itoa(int(userId)), fileName)
-	pre := "https://sbyterman.oss-cn-hangzhou.aliyuncs.com/" // OSS地址前缀
-	err := oss.UploadOSS(videoPath, "video/"+fileName)       // 上传视频
-	if err == nil {
-		playUrl = pre + "video/" + fileName
-
-	}
-	err = oss.UploadOSS(imgPath, "img/"+coverName) //上传封面
-	if err == nil {
-		coverUrl = pre + "img/" + coverName
-	}
-
-	// 下面的playUrl和coverUrl换成OSS地址
-	err = svc.dao.PublishVideo(userId, playUrl, coverUrl, title)
+	err := svc.dao.PublishVideo(userId, playUrl, coverUrl, title)
 
 	return err
 }
@@ -153,37 +121,6 @@ func (svc *Service) QueryBatchVdieoById(favorList []uint) ([]model.Video, error)
 	return svc.dao.QueryBatchVideoById(favorList)
 }
 
-// 根据videoId查询authorId的缓存查找方法
 func (svc *Service) QueryAuthorIdByVideoId(videoId uint) (uint, error) {
-	exist, authorId, err := svc.redis.QueryAuthorIdByVideoId(videoId)
-	if err != nil {
-		return 0, err
-	}
-	if exist {
-		return authorId, nil
-	}
-
-	key := util.VideoAuthorKey(videoId)
-	video_lock.Lock()
-	defer video_lock.Unlock() // defer最后执行
-	exist, authorId, err = svc.redis.QueryAuthorIdByVideoId(videoId)
-
-	if err != nil {
-		return 0, err
-	}
-
-	if exist {
-		return authorId, nil
-	} else {
-		video, err := svc.dao.QueryVideoById(videoId)
-		if err != nil {
-			return 0, err
-		}
-		authorId = video.AuthorId
-		err = svc.redis.Set(key, authorId, time.Hour*12)
-		if err != nil {
-			return 0, err
-		}
-		return authorId, nil
-	}
+	return svc.dao.QueryAuthorIdByVideoId(videoId)
 }
