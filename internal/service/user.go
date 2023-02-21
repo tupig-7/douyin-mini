@@ -20,7 +20,8 @@ type UserInfo struct {
 	BackgroundImage string `json:"background_image"` // 背景图片
 	LoginIP         string `json:"login_ip"`         // 登录IP
 	TotalFavorited  int64  `json:"total_favorited"`  // 被赞的总次数
-	FavoriteCount   int64  `json:"favorite_count"`   //喜欢总数量
+	FavoriteCount   int64  `json:"favorite_count"`   // 喜欢总数量
+	WorkCount       int64  `json:"work_count"`       // 作品总数
 }
 
 type GetUserInfoRequest struct {
@@ -52,9 +53,9 @@ func (svc *Service) CreateUser(param *CreateUserRequest) (uint, error) {
 	return svc.dao.CreateUser(param.UserName, param.Password)
 }
 
-func (svc *Service) UpdateUserLoginIP(param *UpdateIPRequest) error {
-	return svc.dao.UpdateUserLoginIP(param.ID, param.LoginIP)
-}
+// func (svc *Service) UpdateUserLoginIP(param *UpdateIPRequest) error {
+// 	return svc.dao.UpdateUserLoginIP(param.ID, param.LoginIP)
+// }
 
 func (svc *Service) GetUserById(param *GetUserInfoRequest) (model.User, error) {
 	return svc.dao.GetUserById(param.UserId)
