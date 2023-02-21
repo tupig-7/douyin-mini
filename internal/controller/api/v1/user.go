@@ -91,6 +91,7 @@ func (u User) Get(c *gin.Context) {
 	//	global.Logger.Errorf("svc.IsFollow err: %v", err)
 	//}
 	flag := false
+
 	res = service.GetUserInfoResponse{
 		User: &service.UserInfo{
 			ID:              user.ID,
