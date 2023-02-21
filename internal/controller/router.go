@@ -33,6 +33,7 @@ func NewRouter() *gin.Engine {
 	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
 
 	user := v1.NewUser()
+	publish := v1.NewPublish()
 	msg := v1.NewMsg()
 	cmt := v1.NewComment()
 	apiv1 := r.Group("/douyin/")
@@ -47,8 +48,9 @@ func NewRouter() *gin.Engine {
 
 		// comment
 		apiv1.GET("/comment/list/", cmt.List)
+		// publish
+		apiv1.POST("/publish/action/", publish.Action)
 	}
-
 
 	return r
 }
