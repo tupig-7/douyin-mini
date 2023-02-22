@@ -155,7 +155,7 @@ func (r *Relation) FriendList(c *gin.Context) {
 		return
 	}
 
-	valid, tokenErr := app.ValidToken(param.Token, errcode.SkipCheckUserID)
+	valid, tokenErr := app.ValidToken(param.Token, strconv.Itoa(int(param.UserId)))
 	if !valid {
 		global.Logger.Errorf("app.ValidToken errs: %v", tokenErr)
 		res.StatusCode = tokenErr.Code()

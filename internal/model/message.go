@@ -26,7 +26,7 @@ func (m *Message) Update(db *gorm.DB) error {
 func (m *Message) ListByToUserId(db *gorm.DB) ([]Message, error) {
 	var msgs []Message
 	var err error
-	if err = db.Where("to_user_id = ? and from_user_id = ?", m.ToUserId, m.FromUserId).Find(&msgs).Error; err != nil {
+	if err = db.Where("created_at > ? and to_user_id = ? and from_user_id = ?", m.CreatedAt, m.ToUserId, m.FromUserId).Find(&msgs).Error; err != nil {
 		return nil, err
 	}
 	return msgs, nil

@@ -1,4 +1,5 @@
 package model
+
 import (
 	"gorm.io/gorm"
 )
@@ -42,11 +43,15 @@ func (f Follow) QueryFollowerList(db *gorm.DB, userId uint) (follows []Follow, e
 }
 
 func (f Follow) QueryFriendList(db *gorm.DB) (follows []Follow, err error) {
-	var follwer []Follow
-	err = db.Where("followed_id = ?", f.FollowedId).Find(&follwer).Error // 找出所有的粉丝
-	for _, v := range follwer {
+	var follower []Follow
+	var follow Follow
+	err = db.Where("followed_id = ?", f.FollowedId).Find(&follower).Error // 找出所有的粉丝
+	for _, v := range follower {
 		var x int64
-		err = db.Where("follower_id = ? and followed_id = ?", v.FollowerId, f.FollowedId).Count(&x).Error
+		err = db.Where("follower_id = ? and followed_id = ?", v.FollowerId, f.FollowedId).Find(&follow).Count(&x).Error
+		if err !=  nil {
+			return
+		}
 		if x > 0 {
 			follows = append(follows, v)
 		}

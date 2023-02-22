@@ -51,8 +51,8 @@ func NewRouter() *gin.Engine {
 		apiv1.GET("/feed/", feed.Feed)
 
 		// message
-		apiv1.GET("/message/chat", msg.Chat)
-		apiv1.POST("/message/action", msg.Action)
+		apiv1.GET("/message/chat/", msg.Chat)
+		apiv1.POST("/message/action/", msg.Action)
 
 		// comment
 		apiv1.GET("/comment/list/", cmt.List)

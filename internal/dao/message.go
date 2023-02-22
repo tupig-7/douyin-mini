@@ -20,10 +20,12 @@ func (d *Dao) CreateMessage(toUserId, fromUserId uint, content string) (uint, er
 }
 
 // GetMsgByToUserId 查询对方用户id to_user_id为id的消息记录
-func (d *Dao) GetMsgByToUserId(to_user_id, from_user_id uint) ([]model.Message, error) {
+func (d *Dao) GetMsgByToUserId(to_user_id, from_user_id uint, pre_msg_time int64) ([]model.Message, error) {
 	var msg model.Message
 	msg.ToUserId = to_user_id
 	msg.FromUserId = from_user_id
+	msg.Model = &model.Model{}
+	msg.CreatedAt = pre_msg_time
 	msgs, err := msg.ListByToUserId(d.engine)
 	if err != nil {
 		return nil, err
