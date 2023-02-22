@@ -20,6 +20,9 @@ func (d *Dao) CreateComment(userId, videoId uint, content string) (model.Comment
 	if err != nil {
 		return cmt, err
 	}
+	video, _ := d.QueryVideoById(videoId)
+	video.CommentCount += 1
+	err = d.UpdateCommentCnt(video)
 	return cmt, nil
 }
 
@@ -31,6 +34,9 @@ func (d *Dao) DeleteComment(commentId uint) error {
 		Content: "",
 	}
 	err := cmt.Delete(d.engine)
+	video, _ := d.QueryVideoById(cmt.VideoId)
+	video.CommentCount -= 1
+	err = d.UpdateCommentCnt(video)
 	return err
 }
 

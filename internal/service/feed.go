@@ -63,12 +63,12 @@ func (svc *Service) Feed(uid uint, lastTime int64) (pubResp FeedResponse, err er
 
 	for i, video := range videos {
 		isFavor := false
-		//if uid != 0 {
-		//	isFavor, err = svc.IsFavor(uid, video.ID)
-		//	if err != nil {
-		//		return
-		//	}
-		//}
+		if uid != 0 {
+			isFavor, err = svc.IsFavor(uid, video.ID)
+			if err != nil {
+				return
+			}
+		}
 		//favoriteCount, _ := svc.QueryFavorCnt(video.ID)
 		pubResp.VideoList[i] = VideoInfo{
 			Id:            video.ID,

@@ -78,7 +78,7 @@ func (u User) CheckUser(db *gorm.DB) (uint, bool, error) {
 	return user.ID, true, nil
 }
 
-func (u User) GetUserById(db *gorm.DB) (User, error) {
+func (u *User) GetUserById(db *gorm.DB) (User, error) {
 	var user User
 	if err := db.Where("id = ?", u.ID).First(&user).Error; err != nil {
 		return user, err
@@ -108,3 +108,27 @@ func (u User) GetUserByEmail(db *gorm.DB) (User, error) {
 //	fmt.Println("err: ", err)
 //	return err
 //}
+
+// UpdateFollowCnt 更新关注数目
+func (u *User) UpdateFollowCnt(db *gorm.DB, userId uint, cnt int64) error {
+	err := db.Where("id = ?", userId).UpdateColumn("follow_count", cnt).Error
+	return err
+}
+
+// UpdateFollowerCnt 更新粉丝数目
+func (u *User) UpdateFollowerCnt(db *gorm.DB, userId uint, cnt int64) error {
+	err := db.Where("id = ?", userId).UpdateColumn("follower_count", cnt).Error
+	return err
+}
+
+// UpdateWorkCnt 更新作品数目
+func (u *User) UpdateWorkCnt(db *gorm.DB) error {
+	err := db.Where("id = ?", u.ID).UpdateColumn("work_count", u.WorkCount).Error
+	return err
+}
+
+// UpdateFavoriteCnt 更新点赞数目
+func (u *User) UpdateFavoriteCnt(db *gorm.DB) error {
+	err := db.Where("id = ?", u.ID).UpdateColumn("favorite_count", u.FavoriteCount).Error
+	return err
+}

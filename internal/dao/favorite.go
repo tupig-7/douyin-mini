@@ -19,6 +19,12 @@ func (d *Dao) CreateFavorite(userId, videoId uint) (model.Favorite, error) {
 	if err != nil {
 		return fvt, err
 	}
+	video, _ := d.QueryVideoInfoById(videoId)
+	user, _ := d.GetUserById(userId)
+	video.FavoriteCount += 1
+	err = d.UpdateFavoriteCnt(video)
+	user.FavoriteCount += 1
+	err = user.UpdateFavoriteCnt(d.engine)
 	return fvt, nil
 }
 
@@ -36,6 +42,12 @@ func (d *Dao) CancelFavorite(userId, videoId uint) error {
 	if err != nil {
 		return err
 	}
+	video, _ := d.QueryVideoInfoById(videoId)
+	user, _ := d.GetUserById(userId)
+	video.FavoriteCount -= 1
+	err = d.UpdateFavoriteCnt(video)
+	user.FavoriteCount -= 1
+	err = user.UpdateFavoriteCnt(d.engine)
 	return nil
 }
 

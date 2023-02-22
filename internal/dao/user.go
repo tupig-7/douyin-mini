@@ -76,7 +76,29 @@ func (d *Dao) GetUserFanCnt(userId uint) (bool, int64, error) {
 	if err != nil {
 		return false, 0, err
 	}
-	cnt := uu.FollowerCount
+	cnt := uu.FavoriteCount
+	return true, cnt, nil
+}
+
+func (d *Dao) UpdateUserWorkCnt(userId uint, cnt int64) (bool, int64, error) {
+	user := model.User{
+		Model: &model.Model{
+			ID: userId,
+		},
+		WorkCount: cnt,
+	}
+	user.UpdateWorkCnt(d.engine)
+	return true, cnt, nil
+}
+
+func (d *Dao) UpdateUserFavoriteCnt(userId uint, cnt int64) (bool, int64, error) {
+	user := model.User{
+		Model: &model.Model{
+			ID: userId,
+		},
+		FavoriteCount: cnt,
+	}
+	user.UpdateFavoriteCnt(d.engine)
 	return true, cnt, nil
 }
 
@@ -114,3 +136,4 @@ func (d Dao) UpdateById(userId uint, data map[string]interface{}) error {
 	}
 	return user.UpdateById(d.engine, data)
 }
+

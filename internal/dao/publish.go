@@ -29,6 +29,9 @@ func (d *Dao) PublishVideo(authorId uint, playUrl, coverUrl, title string) error
 		Title:         title,
 		PublishDate:   now,
 	}
+	user, _ := d.GetUserById(authorId)
+	user.WorkCount += 1
+	_ = user.UpdateWorkCnt(d.engine)
 	return video.Create(d.engine)
 }
 

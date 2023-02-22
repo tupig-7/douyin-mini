@@ -29,11 +29,12 @@ func (d *Dao) CreateFollow(follower, followed uint) (flag bool, err error) {
 		return
 	}
 	flag = true
+	user, _ := d.GetUserById(follow.FollowerId)
+	user.UpdateFollowCnt(d.engine, follower, user.FollowCount + 1)
 	return
 }
 
 func (d *Dao) CancelFollow(follower, followed uint) (bool, error) {
-
 	follow := model.Follow{
 		FollowedId: followed,
 		FollowerId: follower,
@@ -45,6 +46,8 @@ func (d *Dao) CancelFollow(follower, followed uint) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+	user, _ := d.GetUserById(follow.FollowerId)
+	user.UpdateFollowCnt(d.engine, follower, user.FollowCount - 1)
 	return true, err
 }
 
